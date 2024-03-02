@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { CryptoContext } from "../context/CryptoContextProvider";
-import { Flex } from "antd";
+import { Flex, Empty, Button } from "antd";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -29,11 +29,14 @@ export default function PortfolioChart() {
   };
 
   return (
-    <Flex justify="center" style={{marginBottom: 20}}>
-      <div style={{ width: 400, height: 400 }}>
-
-      <Pie options={{ devicePixelRatio: 4 }} data={data} />
-      </div>
+    <Flex justify="center" style={{ marginBottom: 20 }}>
+      <Flex align="center" justify="center" style={{ width: 400, height: 400 }}>
+        {assets.length !== 0 ? (
+          <Pie options={{ devicePixelRatio: 4 }} data={data} />
+        ) : (
+          <Empty description="No assets..." />
+        )}
+      </Flex>
     </Flex>
   );
 }

@@ -46,7 +46,11 @@ export const CryptoContextProvider = ({children}) => {
         return true
     }
 
+    const deleteAsset = (id) => {
+        setAssets(prev => prev.filter(item => item.id !== id))
+    }
+
     return (
-        <CryptoContext.Provider value={{isLoading, assets, data, addAsset}}>{children}</CryptoContext.Provider>
+        <CryptoContext.Provider value={{isLoading, assets, data, addAsset, deleteAsset}}>{children}</CryptoContext.Provider>
     )
 }
