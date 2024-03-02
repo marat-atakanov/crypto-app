@@ -1,9 +1,12 @@
-import { cryptoAssets, cryptoData } from "./data";
+import { cryptoAssets, cryptoData } from "./data/data";
 
-export const fetchData = () => {
-    return new Promise (resolve => {
-        setTimeout(()=>{return resolve(cryptoData)}, 2)
-    })
+import axios from "axios";
+
+export const fetchData = async () => {
+    const coins = await axios.get("https://openapiv1.coinstats.app/coins", {headers: {
+        "X-API-KEY": "R/EdahFBQZfAR/juFjKdkF2PY5lQjocHLVIAtiTfnzw="
+    }})
+    return coins.data
 }
 
 export const fetchAssets = () => {

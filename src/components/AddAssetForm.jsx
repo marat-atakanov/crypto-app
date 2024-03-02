@@ -33,6 +33,7 @@ export default function AddAssetForm({ setIsDrawerOpen }) {
   const [coin, setCoin] = useState(null);
   const [form] = Form.useForm();
   const [submitted, setSubmitted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const ref = useRef();
 
   const handleSelect = (value) => {
@@ -54,7 +55,6 @@ export default function AddAssetForm({ setIsDrawerOpen }) {
   };
 
   const handleFormFinish = (value) => {
-    console.log(value);
     ref.current = { amount: value.amount, total: value.total };
     const newAsset = {
       amount: value.amount,
@@ -62,16 +62,22 @@ export default function AddAssetForm({ setIsDrawerOpen }) {
       id: coin.id,
       date: value.date.$d ?? new Date(),
     };
-    addAsset(newAsset);
-    setSubmitted(true);
+    if (addAsset(newAsset)) {
+      setIsSuccess(true)
+      setSubmitted(true)
+    }
+    else {
+      setIsSuccess(false)
+      setSubmitted(true)
+    }
   };
 
   if (submitted)
     return (
       <Result
-        status="success"
-        title="New asset is added!"
-        subTitle={`Added ${ref.current.amount} of ${coin.name} by price ${ref.current.total}`}
+        status={isSuccess ? "success" : "error"}
+        title={isSuccess ? "New asset is added" : "The asset is not added"}
+        subTitle={isSuccess ? `Added ${ref.current.amount} of ${coin.name} by price ${ref.current.total}` : `${coin.name} already exists in your assets`}
         extra={[
           <Button
             onClick={() => {

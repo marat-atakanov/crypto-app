@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { fetchAssets, fetchData } from "../api";
 import { formatAsset, mapAssets } from '../utils';
+import axios from "axios";
 
 
 export const CryptoContext = createContext({
@@ -11,11 +12,17 @@ export const CryptoContext = createContext({
 
 export const CryptoContextProvider = ({children}) => {
 
+    const dethc = async () => {
+        const resp = await axios.get("http://localhost:5173/assets")
+        console.log(resp.data);
+    }
     const [isLoading, setIsLoading] = useState(false)
+
     const [data, setData] = useState([])
     const [assets, setAssets] = useState([])
 
     useEffect(() => {
+        dethc()
         const preload = async () => {
             try {
                 setIsLoading(true)
@@ -34,7 +41,9 @@ export const CryptoContextProvider = ({children}) => {
     }, [])
 
     const addAsset = (newAsset) => {
+        if (assets.find(item => item.id === newAsset.id)) return false
         setAssets(prev => [...prev, formatAsset(newAsset, data)])
+        return true
     }
 
     return (
